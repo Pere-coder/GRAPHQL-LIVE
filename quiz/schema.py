@@ -63,10 +63,45 @@ class CategoryMutation(graphene.Mutation):
         category.save()
         return CategoryMutation(category=category)
         
+   
+class QuizzesMutation(graphene.Mutation):
+    
+    class Arguments:
+        title = graphene.String(required=True)
+        category_id = graphene.ID(required=True)
+    quizzes= graphene.Field(QuizzesType)
+    
+    @classmethod
+    def mutate(cls, root, info, title, category_id):
+        category = Category.objects.get(id=category_id)
+        quizzes = Quizzes(title=title, category=category)
+        quizzes.save()
+        return QuizzesMutation(quizzes=quizzes)
         
+   
+class QuestionMutation(graphene.Mutation):
+    
+    class Arguments:
+         title = graphene.String(required=True)
+         quiz_id = graphene.ID(required=True)
+    questions = graphene.Field(QuestionType)
+    
+    @classmethod
+    def mutate(cls, root, info, title, quiz_id):
+        quiz = Quizzes.objects.get(id=quiz_id)
+        
+        questions = Question(title=title, quiz=quiz)
+        questions.save()
+        return QuestionMutation(questions=questions)
+    
+    
+    
+              
 class Mutation(graphene.ObjectType):
     
     update_category = CategoryMutation.Field()
+    update_quiz = QuizzesMutation.Field()
+    update_question = QuestionMutation.Field()
     
    
     

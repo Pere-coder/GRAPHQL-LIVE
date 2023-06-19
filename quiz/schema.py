@@ -51,17 +51,17 @@ class Query(graphene.ObjectType):
         return Quizzes.objects.all()
     
 
-# class CategoryMutation(graphene.Mutation):
+class CategoryMutation(graphene.Mutation):
     
-#     class Arguments:
-#         name = graphene.String(required=True)
-#     category = graphene.Field(CategoryType)
+    class Arguments:
+        name = graphene.String(required=True)
+    category = graphene.Field(CategoryType)
         
-#     @classmethod
-#     def mutate(cls, root, info, name):
-#         category = Category(name=name)
-#         category.save()
-#         return CategoryMutation(category=category)
+    @classmethod
+    def mutate(cls, root, info, name):
+        category = Category(name=name)
+        category.save()
+        return CategoryMutation(category=category)
         
    
 # class QuizzesMutation(graphene.Mutation):
@@ -96,33 +96,31 @@ class Query(graphene.ObjectType):
     
     
 
+# class CategoryMutation(graphene.Mutation):
+    
+#     class Arguments:
+#         id = graphene.ID()
+#         name = graphene.String(required=True)
+#     category = graphene.Field(CategoryType)
+        
+#     @classmethod
+#     def mutate(cls, root, info, name, id):
+#         category = Category.objects.get(id=id)
+#         category.name = name
+#         category.save()
+#         return CategoryMutation(category=category)
+        
 class CategoryMutation(graphene.Mutation):
     
     class Arguments:
         id = graphene.ID()
-        name = graphene.String(required=True)
     category = graphene.Field(CategoryType)
         
     @classmethod
-    def mutate(cls, root, info, name, id):
+    def mutate(cls, root, info, id):
         category = Category.objects.get(id=id)
-        category.name = name
-        category.save()
-        return CategoryMutation(category=category)
-        
-class CategoryMutation(graphene.Mutation):
-    
-    class Arguments:
-        id = graphene.ID()
-        name = graphene.String(required=True)
-    category = graphene.Field(CategoryType)
-        
-    @classmethod
-    def mutate(cls, root, info, name, id):
-        category = Category.objects.get(id=id)
-        category.name = name
-        category.save()
-        return CategoryMutation(category=category)
+        category.delete()
+        return 
         
               
 class Mutation(graphene.ObjectType):
